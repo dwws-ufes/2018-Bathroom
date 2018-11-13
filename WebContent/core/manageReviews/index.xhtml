@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/resources/#{coreInfo.decorator}/decorator.xhtml">
+               
+            <ui:define name="title">
+				<h:outputText value="#{msgsCore['manageReviews.title']}" />
+			</ui:define>
+			
+			<ui:define name="description">
+				<h:outputText value="#{msgsCore['manageReviews.title.description']}" />
+			</ui:define>
+			
+			<ui:define name="body">
+				<h:form id="listingForm">
+					<p:dataTable id="entitiesDataTable" var="entity" value="#{manageReviewsController.lazyEntities}"
+						selection="#{manageReviewsController.selectedEntity}" selectionMode="single" paginator="true"
+						rows="#{manageReviewsController.maxDataTableRowsPerPage}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="#{manageReviewsController.halfMaxDataTableRowsPerPage},#{manageReviewsController.maxDataTableRowsPerPage},#{manageReviewsController.doubleMaxDataTableRowsPerPage}"
+						lazy="true" paginatorPosition="bottom" emptyMessage="#{msgsCore['manageReviews.text.noEntities']}">
+						<p:ajax event="rowSelect" update="buttonsGroup" />
+						<p:ajax event="rowUnselect" update="buttonsGroup" />
+						<f:facet name="header">
+							<h:outputText value="#{msgsCore['manageReviews.text.entities']}" />
+						</f:facet>
+						<p:column headerText="#{msgsCore['manageReviews.field.userName']}">
+							<h:outputText value="#{entity.user.email}" />
+						</p:column>
+						<p:column headerText="#{msgsCore['manageReviews.field.rating']}">
+							<h:outputText value="#{entity.rating}" />
+						</p:column>
+						<p:column headerText="#{msgsCore['manageReviews.field.creationDate']}">
+							<h:outputText value="#{entity.creationDate}" >
+								<f:convertDateTime type="date" pattern="#{msgs['jbutler.format.date.java']}" />
+							</h:outputText>					
+						</p:column>
+						<f:facet name="footer">
+							<h:panelGroup id="buttonsGroup">
+								<p:commandButton action="#{manageReviewsController.create}" icon="fa fa-plus" value="#{msgs['jbutler.crud.button.create']}" />
+								<p:commandButton action="#{manageReviewsController.retrieve}" icon="fa fa-search" value="#{msgs['jbutler.crud.button.retrieve']}"
+									disabled="#{manageReviewsController.selectedEntity == null}" />
+								<p:commandButton action="#{manageReviewsController.update}" icon="fa fa-edit" value="#{msgs['jbutler.crud.button.update']}"
+									disabled="#{manageReviewsController.selectedEntity == null}" />
+								<p:commandButton action="#{manageReviewsController.trash}" icon="fa fa-trash" value="#{msgs['jbutler.crud.button.delete']}"
+									disabled="#{manageReviewsController.selectedEntity == null}" update=":listingForm:trashGroup" />
+							</h:panelGroup>
+						</f:facet>
+					</p:dataTable>
+					<h:panelGroup id="trashGroup">
+						<hr />
+						<p:panel id="trashPanel" header="#{msgs['jbutler.crud.text.trashHeader']}" toggleable="true" toggleSpeed="500"
+							rendered="#{not empty manageReviewsController.trashCan}">
+							<p:dataTable id="trashDataTable" var="entity" value="#{manageReviewsController.trashCan}">
+								<p:column headerText="#{msgsCore['manageReviews.field.userName']}">
+									<h:outputText value="#{entity.userName}" />
+								</p:column>
+								<p:column headerText="#{msgsCore['manageReviews.field.rating']}">
+									<h:outputText value="#{entity.rating}" />
+								</p:column>
+								<p:column headerText="#{msgsCore['manageReviews.field.creationDate']}">
+									<h:outputText value="#{entity.creationDate}">
+										<f:convertDateTime type="date" pattern="#{msgs['jbutler.format.date.java']}" />
+									</h:outputText>
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton action="#{manageReviewsController.cancelDeletion}" value="#{msgs['jbutler.crud.button.cancelDeletion']}"
+										icon="fa fa-fw fa-close" process="@this" update=":listingForm" />
+									<p:commandButton action="#{manageReviewsController.delete}" value="#{msgs['jbutler.crud.button.confirmDeletion']}"
+										icon="fa fa-trash" process="@this" update=":listingForm" />
+								</f:facet>
+							</p:dataTable>
+						</p:panel>
+					</h:panelGroup>
+				</h:form>
+			</ui:define>
+</ui:composition>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/resources/#{coreInfo.decorator}/decorator.xhtml">
+
+	<ui:define name="title"><h:outputText value="#{msgsCore['manageUsers.title']}" /></ui:define>
+    
+    <ui:define name="description"><h:outputText value="#{msgsCore['manageUsers.title.description']}" /></ui:define>
+
+	<ui:define name="body">
+		<h:form id="listingForm">
+			<p:dataTable id="entitiesDataTable" var="entity" value="#{manageUsersController.lazyEntities}"
+				selection="#{manageUsersController.selectedEntity}" selectionMode="single" paginator="true"
+				rows="#{manageUsersController.maxDataTableRowsPerPage}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowsPerPageTemplate="#{manageUsersController.halfMaxDataTableRowsPerPage},#{manageUsersController.maxDataTableRowsPerPage},#{manageUsersController.doubleMaxDataTableRowsPerPage}"
+				lazy="true" paginatorPosition="bottom" emptyMessage="#{msgsCore['manageUsers.text.noEntities']}">
+				<p:ajax event="rowSelect" update="buttonsGroup" />
+				<p:ajax event="rowUnselect" update="buttonsGroup" />
+				<f:facet name="header">
+					<h:outputText value="#{msgsCore['manageUsers.text.entities']}" />
+				</f:facet>
+				<p:column headerText="#{msgsCore['manageUsers.field.name']}">
+					<h:outputText value="#{entity.name}" />
+				</p:column>
+				<p:column headerText="#{msgsCore['manageUsers.field.email']}">
+					<h:outputText value="#{entity.email}" />
+				</p:column>
+				<f:facet name="footer">
+					<h:panelGroup id="buttonsGroup">
+						<p:commandButton action="#{manageUsersController.create}" icon="fa fa-fw fa-user-plus" value="#{msgs['jbutler.crud.button.create']}" />
+						<p:commandButton action="#{manageUsersController.retrieve}" icon="fa fa-fw fa-file-text" value="#{msgs['jbutler.crud.button.retrieve']}"
+							disabled="#{manageUsersController.selectedEntity == null}" />
+						<p:commandButton action="#{manageUsersController.update}" icon="fa fa-fw fa-refresh" value="#{msgs['jbutler.crud.button.update']}"
+							disabled="#{manageUsersController.selectedEntity == null}" />
+						<p:commandButton action="#{manageUsersController.trash}" icon="fa fa-fw fa-trash-o" value="#{msgs['jbutler.crud.button.delete']}"
+							disabled="#{manageUsersController.selectedEntity == null}" update=":listingForm:trashGroup" />
+					</h:panelGroup>
+				</f:facet>
+			</p:dataTable>
+			<h:panelGroup id="trashGroup">
+				<hr />
+				<p:panel id="trashPanel" header="#{msgs['jbutler.crud.text.trashHeader']}" toggleable="true" toggleSpeed="500"
+					rendered="#{not empty manageUsersController.trashCan}">
+					<p:dataTable id="trashDataTable" var="entity" value="#{manageUsersController.trashCan}">
+						<p:column headerText="#{msgsCore['manageUsers.field.email']}">
+							<h:outputText value="#{entity.email}" />
+						</p:column>
+						<p:column headerText="#{msgsCore['manageUsers.field.name']}">
+							<h:outputText value="#{entity.name}" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton action="#{manageUsersController.cancelDeletion}" value="#{msgs['jbutler.crud.button.cancelDeletion']}"
+								icon="fa fa-fw fa-close" process="@this" update=":listingForm" />
+							<p:commandButton action="#{manageUsersController.delete}" value="#{msgs['jbutler.crud.button.confirmDeletion']}"
+								icon="fa fa-fw fa-trash-o" process="@this" update=":listingForm" />
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>			
+</ui:composition>

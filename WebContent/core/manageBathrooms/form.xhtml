@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/resources/#{coreInfo.decorator}/decorator.xhtml">
+                
+            <style type="text/css">
+			    .ui-toggleswitch {
+			        vertical-align: bottom;
+			    }
+			</style>
+			<ui:define name="title">
+				<h:outputText value="#{msgsCore['manageBathrooms.title.create']}"
+					rendered="#{(! manageBathroomsController.readOnly) and (manageBathroomsController.selectedEntity.id == null)}" />
+				<h:outputText value="#{msgsCore['manageBathrooms.title.update']}"
+					rendered="#{(! manageBathroomsController.readOnly) and (manageBathroomsController.selectedEntity.id != null)}" />
+				<h:outputText value="#{msgsCore['manageBathrooms.title.retrieve']}" rendered="#{manageBathroomsController.readOnly}" />
+			</ui:define>
+			
+			<ui:define name="description">
+				<h:outputText value="#{msgsCore['manageBathrooms.title.create.description']}"
+					rendered="#{(! manageBathroomsController.readOnly) and (manageBathroomsController.selectedEntity.id == null)}" />
+				<h:outputText value="#{msgsCore['manageBathrooms.title.update.description']}"
+					rendered="#{(! manageBathroomsController.readOnly) and (manageBathroomsController.selectedEntity.id != null)}" />
+				<h:outputText value="#{msgsCore['manageBathrooms.title.retrieve.description']}" rendered="#{manageBathroomsController.readOnly}" />
+			</ui:define>
+			
+			<ui:define name="body">
+				<h:form id="entitiesForm">
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank">
+						<p:outputLabel for="priceField" value="#{msgsCore['manageBathrooms.form.price']}" />
+						<p:inputNumber id="priceField" value="#{manageBathroomsController.selectedEntity.price}" symbol="R$" symbolPosition="p" 
+                               decimalSeparator="," thousandSeparator="." style="width: 100%;"/>  
+						<p:outputLabel for="nameField" value="#{msgsCore['manageBathrooms.form.name']} " />
+						<p:inputText id="nameField" value="#{manageBathroomsController.selectedEntity.name}" style="width: 100%;" />
+						<p:outputLabel for="descriptionField" value="#{msgsCore['manageBathrooms.form.description']}" />
+						<p:inputText id="descriptionField" value="#{manageBathroomsController.selectedEntity.description}" style="width: 100%;" />
+						<p:outputLabel for="latitudeField" value="#{msgsCore['manageBathrooms.form.latitude']}" />
+						<p:inputText id="latitudeField" value="#{manageBathroomsController.selectedEntity.latitude}" style="width: 100%;" />
+						<p:outputLabel for="longitudeField" value="#{msgsCore['manageBathrooms.form.longitude']}" />
+						<p:inputText id="longitudeField" value="#{manageBathroomsController.selectedEntity.longitude}" style="width: 100%;" />
+						<p:panelGrid columns="3">
+							<i class="fas fa-broom"></i>
+							<p:outputLabel for="isCleanField" value="#{msgsCore['manageBathrooms.form.isClean']}"></p:outputLabel>
+	    					<p:selectBooleanCheckbox id="isCleanField" value="#{manageBathroomsController.selectedEntity.isClean}" />
+	    					<i class="fas fa-heart"></i>
+	    					<p:outputLabel for="isCozyField" value="#{msgsCore['manageBathrooms.form.isCozy']}" />
+	    					<p:selectBooleanCheckbox id="isCozyField" value="#{manageBathroomsController.selectedEntity.isCozy}" />
+							<i class="fas fa-user-secret"></i>
+	    					<p:outputLabel for="isLowProfileField" value="#{msgsCore['manageBathrooms.form.isLowProfile']}" />
+	    					<p:selectBooleanCheckbox id="isLowProfileField" value="#{manageBathroomsController.selectedEntity.isLowProfile}" />
+	    					<i class="fab fa-accessible-icon"></i>
+	    					<p:outputLabel for="isAcessibleField" value="#{msgsCore['manageBathrooms.form.isAcessible']}" />
+	    					<p:selectBooleanCheckbox id="isAcessibleField" value="#{manageBathroomsController.selectedEntity.isAcessible}" />
+	    					<i class="fas fa-toilet-paper"></i>
+	    					<p:outputLabel for="hasPaperField" value="#{msgsCore['manageBathrooms.form.hasPaper']}" />
+	    					<p:selectBooleanCheckbox id="hasPaperField" value="#{manageBathroomsController.selectedEntity.hasPaper}" />
+	    					<i class="fas fa-hand-holding-usd"></i>
+	    					<p:outputLabel for="isFreeField" value="#{msgsCore['manageBathrooms.form.isFree']}" />
+	    					<p:selectBooleanCheckbox id="isFreeField" value="#{manageBathroomsController.selectedEntity.isFree}" />
+    					</p:panelGrid>
+        				
+					</p:panelGrid>
+					<p:commandButton id="cancelButton" value="#{msgs['jbutler.crud.button.cancel']}" icon="fa fa-close"
+						action="#{manageBathroomsController.list}" immediate="true" rendered="#{! manageBathroomsController.readOnly}" />
+					<p:commandButton id="saveButton" value="#{msgs['jbutler.crud.button.save']}" icon="fa fa-save" action="#{manageBathroomsController.save}"
+						rendered="#{! manageBathroomsController.readOnly}" />
+					<p:defaultCommand target="saveButton" />
+					<p:commandButton id="backButton" value="#{msgs['jbutler.crud.button.back']}" icon="fa fa-arrow-circle-left"
+						action="#{manageBathroomsController.list}" immediate="true" rendered="#{manageBathroomsController.readOnly}" />
+				</h:form>
+			</ui:define>
+
+
+
+
+</ui:composition>

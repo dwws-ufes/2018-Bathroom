@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/resources/#{coreInfo.decorator}/decorator.xhtml">
+               
+            <ui:define name="title">
+				<h:outputText value="#{msgsCore['manageBathrooms.title']}" />
+			</ui:define>
+			
+			<ui:define name="description">
+				<h:outputText value="#{msgsCore['manageBathrooms.title.description']}" />
+			</ui:define>
+			
+			<ui:define name="body">
+				<h:form id="listingForm">
+					<p:dataTable id="entitiesDataTable" var="entity" value="#{manageBathroomsController.lazyEntities}"
+						selection="#{manageBathroomsController.selectedEntity}" selectionMode="single" paginator="true"
+						rows="#{manageBathroomsController.maxDataTableRowsPerPage}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="#{manageBathroomsController.halfMaxDataTableRowsPerPage},#{manageBathroomsController.maxDataTableRowsPerPage},#{manageBathroomsController.doubleMaxDataTableRowsPerPage}"
+						lazy="true" paginatorPosition="bottom" emptyMessage="#{msgsCore['manageBathrooms.text.noEntities']}">
+						<p:ajax event="rowSelect" update="buttonsGroup" />
+						<p:ajax event="rowUnselect" update="buttonsGroup" />
+						<f:facet name="header">
+							<h:outputText value="#{msgsCore['manageBathrooms.text.entities']}" />
+						</f:facet>
+						<p:column headerText="#{msgsCore['manageBathrooms.field.name']}">
+							<h:outputText value="#{entity.name}" />
+						</p:column>
+						<p:column headerText="#{msgsCore['manageBathrooms.field.price']}">
+							<h:outputText value="#{entity.price}" />
+						</p:column>
+						<f:facet name="footer">
+							<h:panelGroup id="buttonsGroup">
+								<p:commandButton action="#{manageBathroomsController.create}" icon="fa fa-plus" value="#{msgs['jbutler.crud.button.create']}" />
+								<p:commandButton action="#{manageBathroomsController.retrieve}" icon="fa fa-search" value="#{msgs['jbutler.crud.button.retrieve']}"
+									disabled="#{manageBathroomsController.selectedEntity == null}" />
+								<p:commandButton action="#{manageBathroomsController.update}" icon="fa fa-edit" value="#{msgs['jbutler.crud.button.update']}"
+									disabled="#{manageBathroomsController.selectedEntity == null}" />
+								<p:commandButton action="#{manageBathroomsController.trash}" icon="fa fa-trash" value="#{msgs['jbutler.crud.button.delete']}"
+									disabled="#{manageBathroomsController.selectedEntity == null}" update=":listingForm:trashGroup" />
+							</h:panelGroup>
+						</f:facet>
+					</p:dataTable>
+					<h:panelGroup id="trashGroup">
+						<hr />
+						<p:panel id="trashPanel" header="#{msgs['jbutler.crud.text.trashHeader']}" toggleable="true" toggleSpeed="500"
+							rendered="#{not empty manageBathroomsController.trashCan}">
+							<p:dataTable id="trashDataTable" var="entity" value="#{manageBathroomsController.trashCan}">
+								<p:column headerText="#{msgsCore['manageBathrooms.field.price']}">
+									<h:outputText value="#{entity.price}" />
+								</p:column>
+								<p:column headerText="#{msgsCore['manageBathrooms.field.name']}">
+									<h:outputText value="#{entity.name}" />
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton action="#{manageBathroomsController.cancelDeletion}" value="#{msgs['jbutler.crud.button.cancelDeletion']}"
+										icon="fa fa-fw fa-close" process="@this" update=":listingForm" />
+									<p:commandButton action="#{manageBathroomsController.delete}" value="#{msgs['jbutler.crud.button.confirmDeletion']}"
+										icon="fa fa-trash" process="@this" update=":listingForm" />
+								</f:facet>
+							</p:dataTable>
+						</p:panel>
+					</h:panelGroup>
+				</h:form>
+			</ui:define>
+                
+</ui:composition>
