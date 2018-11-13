@@ -28,7 +28,7 @@ Instructions on how to deploy from scratch are listed below. If you need detaile
 
 6. In Eclipse, use _File_ > _Import_ > _Git_ > _Projects from Git_ to import the Eclipse project existing in this repository;
 
-7. You might have to adjust the server settings in the imported project: right-click the _C2D_ project and select _Properties_. In the _Server_ section, select the _WildFly 10.x_ server. In the _Targeted Runtimes_ section, select the _WildFly 10.x Runtime_;
+7. You might have to adjust the server settings in the imported project: right-click the _PoopTime_ project and select _Properties_. In the _Server_ section, select the _WildFly 13.x_ server. In the _Targeted Runtimes_ section, select the _WildFly 13.x Runtime_;
 
 ## Authors
 
